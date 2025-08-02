@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.pyo
+
+# IDE / редакторы
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Логи и временные файлы
+*.log
+*.tmp
+
+# Python virtualenv
+venv/
+.env
+.env.*
+
+# Скрипты и кэш
+*.bak
+*.old
