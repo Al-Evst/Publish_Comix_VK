@@ -63,21 +63,23 @@ def main():
 
     random_comic_num = random.randint(1, latest_comic_num)
 
+    filename = None
     try:
         filename, caption = download_xkcd_comic(random_comic_num)
+        send_to_telegram(token, chat_id, filename, caption)
     except (HTTPError, Timeout, ConnectionError) as e:
         print(f"Ошибка загрузки комикса: {e}")
-        return
-
-    try:
-        send_to_telegram(token, chat_id, filename, caption)
     except TelegramError as e:
         print(f"Ошибка отправки в Telegram: {e}")
-
-    try:
-        os.remove(filename)
-    except OSError as e:
-        print(f"Ошибка удаления файла: {e}")
+    except Exception as e:
+        print(f"Произошла непредвиденная ошибка: {e}")
+    finally:
+        if filename and os.path.exists(filename):
+            try:
+                os.remove(filename)
+                print(f"Временный файл {filename} удалён.")
+            except OSError as e:
+                print(f"Ошибка удаления файла: {e}")
 
 
 if __name__ == "__main__":
