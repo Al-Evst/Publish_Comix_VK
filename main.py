@@ -7,16 +7,10 @@ from telegram import Bot
 from telegram.error import TelegramError
 
 
-def check_response(response):
-    if response.status_code in [401, 404, 500]:
-        raise HTTPError(f"HTTP error {response.status_code}: {response.reason}")
-    response.raise_for_status()
-
-
 def get_latest_comic_num() -> int:
     url = "https://xkcd.com/info.0.json"
     response = requests.get(url, timeout=10)
-    check_response(response)
+    response.raise_for_status()
     comic_info = response.json()
     return comic_info['num']
 
@@ -24,7 +18,7 @@ def get_latest_comic_num() -> int:
 def download_xkcd_comic(num: int):
     url = f"https://xkcd.com/{num}/info.0.json"
     response = requests.get(url, timeout=10)
-    check_response(response)
+    response.raise_for_status()
     comic_info = response.json()
 
     title = comic_info['title']
@@ -33,7 +27,7 @@ def download_xkcd_comic(num: int):
     filename = f"xkcd_{num}_{title.replace(' ', '_')}.png"
 
     image_response = requests.get(img_url, timeout=10)
-    check_response(image_response)
+    image_response.raise_for_status()
     with open(filename, 'wb') as f:
         f.write(image_response.content)
 
